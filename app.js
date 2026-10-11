@@ -260,11 +260,11 @@
           '<button type="button" class="rule-btn" data-auto-team="' + group.team.id + '" title="按轮班规则自动排满当月">按规则排班</button>';
       }
       if (group.team) {
-        bodyHtml += '<tr><td class="group-row" colspan="' + (cells.length + 1) + '">' +
-          esc(group.team.name) + '<span class="group-count">' + group.staffList.length + " 人</span>" + ruleInfo + "</td></tr>";
+        bodyHtml += '<tr><td class="group-row" colspan="' + (cells.length + 1) + '"><div class="group-inner">' +
+          esc(group.team.name) + '<span class="group-count">' + group.staffList.length + " 人</span>" + ruleInfo + "</div></td></tr>";
       } else {
-        bodyHtml += '<tr><td class="group-row" colspan="' + (cells.length + 1) + '">未分组' +
-          '<span class="group-count">' + group.staffList.length + " 人</span></td></tr>";
+        bodyHtml += '<tr><td class="group-row" colspan="' + (cells.length + 1) + '"><div class="group-inner">未分组' +
+          '<span class="group-count">' + group.staffList.length + " 人</span></div></td></tr>";
       }
       group.staffList.forEach(function (p) {
         bodyHtml += '<tr><td class="staff-cell">' + esc(p.name) +

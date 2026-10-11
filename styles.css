@@ -337,9 +337,13 @@ html, body {
   padding: 6px 12px;
   text-align: left;
   border-bottom: 1px solid var(--border);
+}
+
+.calendar td.group-row .group-inner {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .calendar td.group-row .group-count { font-weight: 400; color: var(--text-faint); margin-left: 6px; }
