@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>排班管理系统</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== 顶栏：标题 + 导航 ===== -->
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <rect x="7" y="13.5" width="3" height="3" rx="0.5" fill="currentColor"/>
+        <rect x="12.5" y="13.5" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.55"/>
+      </svg>
+      <span class="brand-name">排班管理系统</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <a href="#/calendar" class="tab" data-view="calendar" role="tab">排班日历</a>
+      <a href="#/shifts" class="tab" data-view="shifts" role="tab">排班模式</a>
+      <a href="#/teams" class="tab" data-view="teams" role="tab">班组</a>
+      <a href="#/staff" class="tab" data-view="staff" role="tab">人员</a>
+    </nav>
+  </header>
+
+  <main class="main">
+
+    <!-- ===== 视图：排班日历 ===== -->
+    <section id="view-calendar" class="view">
+      <div class="calendar-toolbar">
+        <div class="month-nav">
+          <button id="btn-prev" class="icon-btn" title="上个月" aria-label="上个月">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span id="month-label" class="month-label"></span>
+          <button id="btn-next" class="icon-btn" title="下个月" aria-label="下个月">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button id="btn-today" class="ghost-btn">回到今天</button>
+        </div>
+        <div class="toolbar-right">
+          <div id="legend" class="legend"></div>
+          <div class="export-box">
+            <button id="btn-export" class="ghost-btn" title="导出数据" aria-haspopup="true" aria-expanded="false">
+              <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v3h16v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              导出
+            </button>
+            <div id="export-menu" class="export-menu hidden">
+              <button type="button" class="export-item" data-export="csv">导出本月排班表（CSV）</button>
+              <button type="button" class="export-item" data-export="json">备份全部数据（JSON）</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="calendar-empty" class="empty-state hidden">
+        <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M5.5 19c.8-3.2 3.3-5 6.5-5s5.7 1.8 6.5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <p>还没有人员，先去「人员」页添加，然后就能在日历上排班了。</p>
+        <a href="#/staff" class="ghost-btn">去添加人员</a>
+      </div>
+
+      <div id="calendar-wrap" class="calendar-wrap hidden">
+        <table class="calendar" id="calendar-table">
+          <thead id="calendar-head"></thead>
+          <tbody id="calendar-body"></tbody>
+        </table>
+        <p class="hint">同一班组共用同一套排班：点击格子可设置班次并同步整组；在「班组」页为班组配置轮班规则后，点击分组行的「按规则排班」即可一键排满整月。</p>
+      </div>
+    </section>
+
+    <!-- ===== 视图：排班模式 ===== -->
+    <section id="view-shifts" class="view hidden">
+      <div class="view-head">
+        <div>
+          <h2>排班模式</h2>
+          <p class="view-desc">定义有哪些班次（如白班、夜班、休息），日历上的每个色块对应一种班次。</p>
+        </div>
+        <button id="btn-add-shift" class="primary-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          添加排班模式
+        </button>
+      </div>
+      <div id="shift-list" class="card-grid"></div>
+    </section>
+
+    <!-- ===== 视图：班组 ===== -->
+    <section id="view-teams" class="view hidden">
+      <div class="view-head">
+        <div>
+          <h2>班组</h2>
+          <p class="view-desc">把人员归入班组，日历会按班组分组展示。</p>
+        </div>
+        <button id="btn-add-team" class="primary-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          添加班组
+        </button>
+      </div>
+      <div id="team-list" class="card-grid"></div>
+    </section>
+
+    <!-- ===== 视图：人员 ===== -->
+    <section id="view-staff" class="view hidden">
+      <div class="view-head">
+        <div>
+          <h2>人员</h2>
+          <p class="view-desc">管理排班人员及其所属班组。</p>
+        </div>
+        <button id="btn-add-staff" class="primary-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          添加人员
+        </button>
+      </div>
+      <div id="staff-list" class="staff-table-wrap"></div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <span>数据保存在当前浏览器（本地存储），换设备或浏览器不共享。</span>
+  </footer>
+</div>
+
+<!-- ===== 通用编辑弹窗 ===== -->
+<div id="modal-mask" class="modal-mask hidden">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <h3 id="modal-title"></h3>
+      <button id="modal-close" class="icon-btn" title="关闭" aria-label="关闭">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <form id="modal-form" class="modal-body" novalidate>
+      <div id="modal-fields"></div>
+      <div class="modal-actions">
+        <button type="button" id="modal-cancel" class="ghost-btn">取消</button>
+        <button type="submit" id="modal-save" class="primary-btn">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== 班次选择浮层 ===== -->
+<div id="shift-popover" class="shift-popover hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
