@@ -10,6 +10,61 @@
   "use strict";
 
   var STORAGE_KEY = "carane-shift-scheduler-data-v1";
+
+  /* ===== 默认数据（由备份导入，2026-10 排班） ===== */
+  var DEFAULT_DATA = {
+    shiftTypes: [
+      { id: "mv3teyfr4oswz", name: "白班", color: "#2563eb", start: "07:00", end: "19:00" },
+      { id: "mv3teyfrsfc45", name: "夜班", color: "#6d28d9", start: "19:00", end: "07:00" },
+      { id: "mv3teyfrv715e", name: "白", color: "#10b981", start: "07:00", end: "19:00" },
+      { id: "mv3u1om5qzdcg", name: "休息", color: "#10b981", start: "", end: "" }
+    ],
+    teams: [
+      { id: "mv3teyfrsyv9c", name: "一班", rule: { seq: ["mv3teyfr4oswz", "mv3teyfr4oswz", "mv3u1om5qzdcg"] } },
+      { id: "mv3teyfr4ppjs", name: "二班", rule: { seq: ["mv3u1om5qzdcg", "mv3teyfr4oswz", "mv3teyfr4oswz"] } },
+      { id: "mv3u91evidput", name: "三班", rule: { seq: ["mv3teyfr4oswz", "mv3u1om5qzdcg", "mv3teyfr4oswz"] } }
+    ],
+    staff: [
+      { id: "mv3teyfr8zibq", name: "张伟", teamId: "mv3teyfrsyv9c", phone: "138****1234", note: "" },
+      { id: "mv3teyfrb82yb", name: "刘元龙", teamId: "mv3teyfr4ppjs", phone: "", note: "" },
+      { id: "mv3u9g60hn24w", name: "王卫华", teamId: "mv3u91evidput", phone: "", note: "" },
+      { id: "mv3ublr63rcw8", name: "张威", teamId: "mv3u91evidput", phone: "", note: "" }
+    ],
+    schedule: {
+      "2026-10-01": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-02": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-03": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-04": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-05": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-06": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-07": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-08": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-09": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-10": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-11": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-12": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-13": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-14": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-15": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-16": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-17": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-18": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-19": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-20": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-21": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-22": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-23": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-24": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-25": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-26": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-27": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-28": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-29": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3u1om5qzdcg" },
+      "2026-10-30": { "mv3teyfrsyv9c": "mv3u1om5qzdcg", "mv3teyfr4ppjs": "mv3teyfr4oswz", "mv3u91evidput": "mv3teyfr4oswz" },
+      "2026-10-31": { "mv3teyfrsyv9c": "mv3teyfr4oswz", "mv3teyfr4ppjs": "mv3u1om5qzdcg", "mv3u91evidput": "mv3teyfr4oswz" }
+    }
+  };
+
   var state = {
     shiftTypes: [],
     teams: [],
@@ -109,40 +164,13 @@
     }));
   }
 
-  /* 首次使用：写入少量示例数据，帮助理解排班方式 */
+  /* 首次使用：写入默认排班数据（备份导入） */
   function seedData() {
-    var now = today();
-    var s1 = uid(), s2 = uid(), s3 = uid();
-    var t1 = uid(), t2 = uid();
-    var p1 = uid(), p2 = uid(), p3 = uid(), p4 = uid();
-
-    state.shiftTypes = [
-      { id: s1, name: "白班", color: "#2563eb", start: "08:00", end: "16:00" },
-      { id: s2, name: "夜班", color: "#6d28d9", start: "16:00", end: "24:00" },
-      { id: s3, name: "休息", color: "#10b981", start: "", end: "" }
-    ];
-    state.teams = [
-      { id: t1, name: "一班", rule: { seq: [s1, s1, s2, s2, s3] } },
-      { id: t2, name: "二班", rule: { seq: [s1, s2, s3] } }
-    ];
-    state.staff = [
-      { id: p1, name: "张伟", teamId: t1, phone: "138****1234", note: "" },
-      { id: p2, name: "李娜", teamId: t1, phone: "", note: "" },
-      { id: p3, name: "王强", teamId: t2, phone: "", note: "" },
-      { id: p4, name: "刘洋", teamId: t2, phone: "", note: "" }
-    ];
-
-    // 当月 1 号起 14 天，按各班组自己的轮班规则生成
-    state.schedule = {};
-    var days = new Date(now.year, now.month + 1, 0).getDate();
-    for (var d = 1; d <= Math.min(14, days); d++) {
-      var key = dateKey(now.year, now.month, d);
-      state.schedule[key] = {};
-      state.teams.forEach(function (team) {
-        var seq = team.rule.seq;
-        state.schedule[key][team.id] = seq[(d - 1) % seq.length];
-      });
-    }
+    var data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    state.shiftTypes = data.shiftTypes;
+    state.teams = data.teams;
+    state.staff = data.staff;
+    state.schedule = data.schedule;
     save();
   }
 
@@ -256,18 +284,19 @@
           var cls = ["date-cell"];
           if (!c.inMonth) cls.push("other-month");
           else if (isWeekend && !shift) cls.push("weekend");
-          if (isToday && !shift) cls.push("today-col");
+          if (isToday) cls.push("today-col");
           if (shift) cls.push("has-shift");
 
           if (!c.inMonth) {
-            bodyHtml += '<td class="' + cls.join(" ") + '" data-nav="' + dateKey(c.year, c.month, c.day) + '"></td>';
+            bodyHtml += '<td class="' + cls.join(" ") + '" data-nav="' + dateKey(c.year, c.month, c.day) + '"><span class="cell-day">' + c.day + "</span></td>";
           } else if (shift) {
             bodyHtml += '<td class="' + cls.join(" ") + '" data-staff="' + p.id + '" data-date="' + key + '">' +
+              '<span class="cell-day">' + c.day + "</span>" +
               '<button type="button" class="shift-chip" style="background:' + esc(shift.color) + '" ' +
               'data-staff="' + p.id + '" data-date="' + key + '" title="' + esc(shift.name) + " " +
               esc(fmtRange(shift)) + '">' + esc(shift.name) + "</button></td>";
           } else {
-            bodyHtml += '<td class="' + cls.join(" ") + '" data-staff="' + p.id + '" data-date="' + key + '"></td>';
+            bodyHtml += '<td class="' + cls.join(" ") + '" data-staff="' + p.id + '" data-date="' + key + '"><span class="cell-day">' + c.day + "</span></td>";
           }
         });
         bodyHtml += "</tr>";
