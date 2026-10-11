@@ -395,6 +395,15 @@ html, body {
 
 .shift-chip:hover { filter: brightness(0.92); transform: scale(1.03); }
 
+.shift-chip-rest {
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  text-shadow: none;
+}
+
+.shift-chip-rest:hover { filter: none; transform: none; }
+
 .hint { margin: 12px 2px 0; color: var(--text-faint); font-size: 12px; }
 
 /* ===== 卡片列表（排班模式 / 班组） ===== */

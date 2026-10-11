@@ -17,7 +17,7 @@
       { id: "mv3teyfr4oswz", name: "白班", color: "#2563eb", start: "07:00", end: "19:00" },
       { id: "mv3teyfrsfc45", name: "夜班", color: "#6d28d9", start: "19:00", end: "07:00" },
       { id: "mv3teyfrv715e", name: "白", color: "#10b981", start: "07:00", end: "19:00" },
-      { id: "mv3u1om5qzdcg", name: "休息", color: "#10b981", start: "", end: "" }
+      { id: "mv3u1om5qzdcg", name: "休息", color: "#ffffff", start: "", end: "" }
     ],
     teams: [
       { id: "mv3teyfrsyv9c", name: "一班", rule: { seq: ["mv3teyfr4oswz", "mv3teyfr4oswz", "mv3u1om5qzdcg"] } },
@@ -25,7 +25,7 @@
       { id: "mv3u91evidput", name: "三班", rule: { seq: ["mv3teyfr4oswz", "mv3u1om5qzdcg", "mv3teyfr4oswz"] } }
     ],
     staff: [
-      { id: "mv3teyfr8zibq", name: "张伟", teamId: "mv3teyfrsyv9c", phone: "138****1234", note: "" },
+      { id: "mv3teyfr8zibq", name: "张宇冲", teamId: "mv3teyfrsyv9c", phone: "138****1234", note: "" },
       { id: "mv3teyfrb82yb", name: "刘元龙", teamId: "mv3teyfr4ppjs", phone: "", note: "" },
       { id: "mv3u9g60hn24w", name: "王卫华", teamId: "mv3u91evidput", phone: "", note: "" },
       { id: "mv3ublr63rcw8", name: "张威", teamId: "mv3u91evidput", phone: "", note: "" }
@@ -138,6 +138,7 @@
         state.staff = data.staff || [];
         state.schedule = data.schedule || {};
         migrateSchedule();
+        migrateStaffNames();
         if (ensureRestShift()) save();
         return;
       }
@@ -290,9 +291,12 @@
           if (!c.inMonth) {
             bodyHtml += '<td class="' + cls.join(" ") + '" data-nav="' + dateKey(c.year, c.month, c.day) + '"><span class="cell-day">' + c.day + "</span></td>";
           } else if (shift) {
+            var isRest = !shift.start && !shift.end;
+            var chipCls = isRest ? "shift-chip shift-chip-rest" : "shift-chip";
+            var chipStyle = isRest ? "" : "background:" + esc(shift.color);
             bodyHtml += '<td class="' + cls.join(" ") + '" data-staff="' + p.id + '" data-date="' + key + '">' +
               '<span class="cell-day">' + c.day + "</span>" +
-              '<button type="button" class="shift-chip" style="background:' + esc(shift.color) + '" ' +
+              '<button type="button" class="' + chipCls + '" style="' + chipStyle + '" ' +
               'data-staff="' + p.id + '" data-date="' + key + '" title="' + esc(shift.name) + " " +
               esc(fmtRange(shift)) + '">' + esc(shift.name) + "</button></td>";
           } else {
@@ -362,6 +366,18 @@
         day[tid] = best;
       });
       if (Object.keys(day).length === 0) delete state.schedule[key];
+    });
+    if (changed) save();
+  }
+
+  /* 人员改名迁移：默认人员「张伟」→「张宇冲」（按默认 id 精确匹配，不影响用户自建同名人员） */
+  function migrateStaffNames() {
+    var changed = false;
+    state.staff.forEach(function (p) {
+      if (p.id === "mv3teyfr8zibq" && p.name !== "张宇冲") {
+        p.name = "张宇冲";
+        changed = true;
+      }
     });
     if (changed) save();
   }
